@@ -1,0 +1,69 @@
+/* Reset */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+/* Navbar */
+.navbar-brand a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Tiêu đề chương */
+.tieu-de {
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+/* Nội dung chương */
+.noi-dung div {
+  margin-bottom: 1rem;
+}
+
+/* Menu chương */
+.menu {
+  position: fixed;
+  bottom: 0;
+  right: -400px;
+  width: 400px;
+  height: 90%;
+  background-color: #fff;
+  transition: right 0.3s ease;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+  z-index: 1050;
+}
+
+.menu.open { right: 0; }
+
+.menu .chap {
+  overflow-y: auto;
+  height: 100%;
+}
+
+.menu .fa {
+  position: absolute;
+  bottom: 55px;
+  left: -30px;
+  font-size: 22px;
+  cursor: pointer;
+  background-color: white;
+  padding: 6px;
+  border-radius: 5px 0 0 5px;
+  color: gray;
+}
+
+/* Bình luận */
+#commentsList ul li {
+  margin-bottom: 15px;
+  padding: 15px;
+  border-radius: 8px;
+  background-color: #f8f9fa;
+}
+
+.comment .nick-name {
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.comment .comment-date {
+  font-size: 0.85rem;
+  color: gray;
+}

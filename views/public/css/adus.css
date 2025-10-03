@@ -1,0 +1,156 @@
+
+body, h1,h2, h3, h4, h5, h6, p, ol, ul {
+    margin: 0;
+    padding: 0;
+}
+  
+body {
+    font-family: 'Arial', sans-serif; 
+    line-height: 1.6;
+}
+
+/*Header*/
+header {
+    background-color: rgb(183, 183, 183);
+    color: white;
+    padding: 15px 20px;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header-right h1 {
+    margin-right: 20px;
+    font-size: 1.5em;
+    text-align: center;
+}
+
+.logo {
+    width: 70px;
+    height: 70px;
+    margin-right: 20px;
+}
+
+.logout-btn {
+    background-color: #87f5df;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.logout-btn i {
+    margin-right: 5px;
+}
+  
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+  
+  /* Layout */
+.container {
+    width: 90%;
+    margin: 0 auto;
+    overflow: hidden;
+}
+   
+aside {
+    float: left;
+    width: 20%;
+    padding: 1rem;
+}
+  
+main {
+    float: left;
+    width: 80%;
+    padding: 1rem;
+}
+  
+  
+  /* Components */
+  /* Bảng */
+#user-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1rem;
+}
+  
+#user-table th, #user-table td {
+    border: 1px solid #ddd;
+    padding: 0.75rem;
+    text-align: left;
+}
+  
+#user-table th {
+    font-weight: bold;
+}
+  
+  /* Form */
+.search-filter {
+    margin-bottom: 1rem;
+}
+  
+.search-filter input[type="text"],
+.search-filter select {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-right: 0.5rem;
+}
+  
+.search-filter button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+  
+  
+:root {
+    --primary-color: #f05858; 
+    --secondary-color: #d1c0ee; 
+    --accent-color: #46f6c7; 
+    --text-color: #333;
+    --bg-color: #f8f8f8;
+}
+  
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+  
+aside {
+    background-color: #eee;
+}
+  
+#user-table th {
+    background-color: #87f5df;
+    color: var(--text-color);
+}
+  
+.search-filter button {
+    background-color: var(--primary-color);
+    color: #fff;
+}
+  
+.search-filter button:hover {
+    background-color: #f42a2a; 
+}

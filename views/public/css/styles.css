@@ -1,0 +1,102 @@
+/* Reset nhẹ */
+body {
+  font-family: 'Ponomar', sans-serif;
+  background-color: #f8f9fa;
+  color: #212529;
+  margin: 0;
+  padding: 0;
+}
+
+/* Navbar */
+.navbar-brand img {
+  max-height: 40px;
+}
+
+.navbar-nav .nav-link {
+  font-weight: 500;
+  margin-right: 10px;
+}
+
+.navbar-nav .dropdown-menu {
+  font-size: 0.95rem;
+}
+
+/* Search form trong navbar */
+.search-form input {
+  border-radius: 20px 0 0 20px;
+}
+
+.search-form button {
+  border-radius: 0 20px 20px 0;
+}
+
+/* Box chứa danh sách */
+.box {
+  padding: 40px 15px;
+  background-color: #fff;
+}
+
+.related-stories h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 25px;
+  border-bottom: 2px solid #dee2e6;
+  padding-bottom: 10px;
+}
+
+/* Card truyện */
+#storyContainer .card {
+  transition: transform 0.2s, box-shadow 0.2s;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+#storyContainer .card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+#storyContainer .card-img-top {
+  height: 420px;
+  object-fit: cover;
+}
+
+#storyContainer .card-title {
+  font-size: 1rem;
+  line-height: 1.3;
+  font-weight: 600;
+  margin: 0;
+  display: -webkit-box; /* Để hiển thị dưới dạng box */
+  -webkit-box-orient: vertical; /* Định hướng box theo chiều dọc */
+  -webkit-line-clamp: 2; /* Giới hạn số dòng hiển thị */
+  overflow: hidden; /* Ẩn phần văn bản vượt quá */
+  text-overflow: ellipsis; /* Thêm dấu ba chấm */
+}
+
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 25px 0;
+  gap: 10px;
+}
+
+.pagination button {
+  padding: 8px 16px;
+  border: none;
+  background-color: #198754;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.pagination button:hover {
+  background-color: #146c43;
+}
+
+#page-info {
+  font-weight: 500;
+}

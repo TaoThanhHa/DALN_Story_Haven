@@ -1,0 +1,505 @@
+body {
+  font-family: 'Roboto', sans-serif;
+  background-image: url(../images/nen.jpg);
+  color: #333;
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+}
+
+body .container1 {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  padding-top: 70px;
+}
+
+/* Header */
+body .navbar {
+  background-color: white;
+  border-bottom: 1px solid #eee;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000; 
+}
+
+.navbar-brand img {
+  height: 40px;
+}
+
+.dropdown-menu {
+  border: none;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Tìm kiếm */
+.navbar .search-form {
+  width: 100%;
+  max-width: 300px; 
+}
+
+.navbar .form-control{
+  border: none;
+  outline: none;
+  padding-left: 10px;
+  background-color: #f8f9fa;
+}
+
+.navbar .btn-outline-success{
+  margin-right: 10px;
+  border: none;
+  outline: none;
+  background: #f8f9fa;
+  color: gray;
+}
+
+.navbar .btn-outline-success:hover{
+  border: none;
+  outline: none;
+  background: #f8f9fa;
+  color: gray;
+}
+
+/* Profile */
+.profile {
+  position: relative;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  border: 2px solid #ee6136;
+  height: 300px; 
+}
+
+.profile__background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("../images/avt10.jpg"); 
+  background-size: cover;
+  background-position: center;
+  z-index: 0;
+  border-radius: 8px;
+}
+
+.profile__avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin: 0 auto 15px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 3px solid #fff;
+  position: relative;
+  z-index: 1;
+}
+
+.profile__avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.profile__info {
+  position: relative;
+  z-index: 1;
+  color: white;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.profile__name {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.profile__username {
+  color: #eee;
+  margin-bottom: 15px;
+}
+
+.profile__stats {
+  display: flex;
+  justify-content: space-around;
+  color: #ddd;
+}
+
+.profile__stats span {
+  font-size: 0.9em;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.profile__stats span i {
+  color: #00bcd4;
+}
+
+/* Tabs Navigation */
+.tabs {
+  display: flex;
+  background-color: #fff;
+  border-bottom: 1px solid #eee;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.tab {
+  padding: 10px 15px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  color: #777;
+  font-size: 1em;
+  transition: color 0.3s;
+}
+
+.tab:hover {
+  color: #333;
+  background-color: #ffebee;
+}
+
+.tab--active {
+  color: #4afbe7;
+  border-bottom: 2px solid #f3563a;
+}
+
+/* Main Content */
+.content__section {
+  display: none;
+  padding: 20px;
+  background-color: #d2f8f3;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.content__section--active {
+  display: block;
+}
+
+/* Cards */
+.card {
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  border: 1px solid #eee;
+  background-color: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.card h3 {
+  font-size: 1.2em;
+  margin-bottom: 10px;
+  color: #555;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.card h3 i {
+  color: #29b6f6;
+}
+
+/* Following List */
+.following-list {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+}
+
+.following-item {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: block;
+  transition: transform 0.3s ease;
+  border: 2px solid #f8613f;
+}
+
+.following-item:hover {
+  transform: scale(1.1);
+}
+
+.following-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Work List */
+.work-list .work-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.work-list .work-item img {
+  width: 80px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 5px;
+  margin-right: 15px;
+}
+
+.work-list .work-item h4 {
+  font-size: 1em;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.work-list .work-item p {
+  color: #666;
+  font-size: 0.9em;
+}
+
+/* CSS cho danh sách tác phẩm (kiểu mới) */
+.card-header h3 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-header h3 i {
+  color: #888;
+  cursor: pointer;
+}
+
+.work-list {
+  padding: 10px;
+}
+
+.work-item {
+  display: flex;
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.work-item img {
+  width: 120px;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 5px;
+  margin-right: 15px;
+}
+
+.work-info h4 {
+  font-size: 1.1em;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.work-info p {
+  margin-bottom: 5px;
+}
+
+.text-muted {
+  font-size: 0.8em;
+  color: #888 !important;
+}
+
+.float-end {
+  float: right !important;
+}
+
+/* CSS cho đường kẻ chia cách */
+.card hr {
+  border: none;
+  border-top: 1px solid #eee;
+  margin: 10px 0;
+}
+
+/* Bình luận */
+/* CSS cho phần bình luận */
+.title-cmt {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-left: 20px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  color: #555;
+}
+
+.cmt {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+}
+
+.box-cmt {
+  width: 80%;
+  margin-bottom: 20px;
+}
+
+.box-cmt .row {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  padding: 5px;
+  margin-bottom: 10px;
+}
+
+textarea {
+  width: 100%;
+  border: none;
+  outline: none;
+  resize: none;
+  padding: 10px;
+  font-size: 1rem;
+  line-height: 1.4;
+  height: 40px;
+  max-height: 150px;
+  color: #444;
+}
+
+.box-cmt .row .col-2 {
+  text-align: right;
+  padding-right: 10px;
+}
+
+button {
+  padding: 8px 12px;
+  background-color: #5cb85c;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+button:hover {
+  background-color: #4cae4c;
+}
+
+#commentsList {
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+#commentsList h3 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  color: #777;
+}
+
+/* Style cho bình luận */
+.comment {
+  display: flex; /* Sử dụng flexbox */
+  margin-bottom: 15px;
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+/* Style cho avatar */
+.avt {
+  width: 50px;
+  height: 50px;
+  margin-right: 10px; /* Thêm khoảng cách giữa avatar và nội dung */
+}
+
+.avt img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Style cho chi tiết bình luận */
+.comments-detail {
+  flex: 1; /* Chiếm phần còn lại của không gian */
+}
+
+.nick-name {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 2px;
+  color: #333;
+}
+
+.comments-info {
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color: #555;
+}
+
+.comments-item {
+  display: flex;
+  align-items: center;
+  margin-top: 5px;
+}
+
+.comment-date {
+  color: #777;
+  font-size: 0.8rem;
+  margin-right: 10px;
+}
+
+.comments-symbol {
+  display: flex;
+  align-items: center;
+}
+
+.comments-symbol > div {
+  margin-left: 10px;
+  color: #777;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.comments-symbol > div:hover {
+  color: #337ab7;
+}
+
+.replies {
+  margin-left: 20px;
+  padding-left: 10px;
+  border-left: 2px solid #ddd;
+  margin-top: 10px;
+}
+
+.reply {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+}
+
+.reply-form {
+  margin-left: 20px;
+  margin-top: 10px;
+}
+
+.reply-form textarea {
+  width: 100%;
+  padding: 8px;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  resize: vertical;
+  color: #444;
+}
+
+.reply-form button {
+  padding: 6px 10px;
+  background-color: #337ab7;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.reply-form button:hover {
+  background-color: #23527c;
+}

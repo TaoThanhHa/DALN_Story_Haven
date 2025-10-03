@@ -1,0 +1,16 @@
+body {
+  font-family: sans-serif;
+  background-color: #f8f9fa;
+  margin-top: 80px;
+}
+
+.story-card img {
+  height: 180px;
+  object-fit: cover;
+  border-radius: 0.25rem;
+}
+
+.story-meta {
+  font-size: 0.875rem;
+  color: #6c757d;
+}
