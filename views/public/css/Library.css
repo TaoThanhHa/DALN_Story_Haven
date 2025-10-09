@@ -103,3 +103,6 @@ footer .footer-title {
     margin-bottom: 10px;
 }
 
+
+.voted { background-color: #ff4d4f !important; color: white !important; }
+.followed { background-color: #007bff !important; color: white !important; }

@@ -11,7 +11,7 @@ const storyController = {
         res.sendFile(path.join(__dirname, '../views/public/html', 'Library.html'));
     },
     getDetailStory(req, res) {
-        res.sendFile(path.join(__dirname, '../views/public/html', 'detail-story.html'));
+        res.sendFile(path.join(__dirname, '../views/public/html', 'detail_story.html'));
     },
     getNewStory: (req, res) => {
         res.sendFile(path.join(__dirname, '../views/public/html', 'new-story.html'));
@@ -37,6 +37,14 @@ const storyController = {
     getEditChapter: (req, res) => {
         res.sendFile(path.join(__dirname, '../views/public/html', 'editchapter.html'));
     },
+    getSearch: (req, res) => {
+        res.sendFile(path.join(__dirname, '../views/public/html', 'search_result.html'));
+    },
+    getCategory: (req, res) => {
+        res.sendFile(path.join(__dirname, '../views/public/html', 'Category.html'));
+    },
+
+
 };
 
 module.exports = storyController;

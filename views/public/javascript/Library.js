@@ -56,3 +56,13 @@ document.querySelector(".search-form").addEventListener("submit", function (even
         })
         .catch((error) => console.error("Search error:", error));
 });
+
+function fetchStories() {
+    fetch("http://localhost:3000/api/library", { credentials: "include" })
+        .then((response) => response.json())
+        .then((data) => {
+            if (Array.isArray(data)) renderStories(data);
+            else console.error("Không có dữ liệu:", data.error);
+        })
+        .catch((error) => console.error("Fetch error:", error));
+}

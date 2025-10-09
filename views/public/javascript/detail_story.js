@@ -105,3 +105,23 @@ function renderPagination() {
     pagination.appendChild(li);
   }
 }
+
+const followBtn = document.getElementById("followBtn");
+followBtn.addEventListener("click", () => {
+  fetch("/api/story/follow", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ storyId })
+  })
+    .then(res => res.json())
+    .then(data => {
+      if (data.followed) {
+        followBtn.classList.add("btn-danger");
+        followBtn.innerHTML = '<i class="fas fa-heart"></i> Đang theo dõi';
+      } else {
+        followBtn.classList.remove("btn-danger");
+        followBtn.innerHTML = '<i class="fas fa-heart"></i> Theo dõi';
+      }
+    });
+});
+

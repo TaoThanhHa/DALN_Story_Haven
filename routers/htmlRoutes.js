@@ -19,5 +19,7 @@ router.get('/login', storyController.getLogin);
 router.get('/register', storyController.getRegister);
 router.get('/account', storyController.getAccount);
 router.get('/editchapter', authMiddleware, storyController.getEditChapter);
+router.get("/search", storyController.getSearch);
+router.get('/category', storyController.getCategory);
 
 module.exports = router;

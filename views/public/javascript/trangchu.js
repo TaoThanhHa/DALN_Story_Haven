@@ -1,21 +1,3 @@
-// Xử lý tìm kiếm (di chuyển từ event listener)
-function performSearch(query) {
-    fetch("/api/stories") // Gọi API lại để lọc dữ liệu
-        .then((response) => response.json())
-        .then((data) => {
-            if (data) {
-                const filteredStories = data.filter((story) =>
-                    story.title.toLowerCase().includes(query.toLowerCase())
-                );
-                console.log(filteredStories);
-                renderStories(filteredStories);
-            }
-        })
-        .catch((error) => console.error("Search error:", error));
-}
-
-// Hàm render danh sách truyện (sửa đổi cho phù hợp với cấu trúc HTML mới)
-// Hàm render danh sách truyện (JS thuần, không cần jQuery)
 function renderStories(stories) {
     const storyContainer = document.getElementById("storyContainer");
     storyContainer.innerHTML = ""; // Xóa danh sách cũ
@@ -53,13 +35,6 @@ function fetchStories() {
         })
         .catch((error) => console.error("Fetch error:", error));
 }
-
-// Xử lý tìm kiếm
-document.querySelector(".search-form").addEventListener("submit", function (event) {
-    event.preventDefault();
-    const searchQuery = document.querySelector(".search-form input").value;
-    performSearch(searchQuery);
-});
    
 // Gọi fetchStories khi trang tải xong
 fetchStories();
