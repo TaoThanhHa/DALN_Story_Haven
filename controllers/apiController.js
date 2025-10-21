@@ -265,33 +265,75 @@ const apiController = {
     login: async (req, res) => {
         try {
             const { email, password } = req.body;
-            console.log('Login input:', { email, password, length: password.length });
+            console.log('Login input:', { email, password });
+
+            // Tìm user theo email
             const users = await new Promise((resolve, reject) => {
                 User.findByEmail(email, (err, users) => {
                     if (err) reject(err);
                     else resolve(users);
                 });
             });
-            if (!users[0]) {
-                return res.status(401).json({ error: 'Invalid credentials' });
+
+            if (!users || users.length === 0) {
+                return res.status(401).json({ success: false, error: 'Invalid credentials' });
             }
+
             const user = users[0];
-            bcrypt.compare(password, user.password, (err, match) => {
-                if (err) {
-                    console.log('Error comparing passwords:', err);
-                    return res.status(500).json({ error: 'Server error' });
+            console.log('User found:', user);
+
+            // So sánh mật khẩu (hỗ trợ cả hash và plaintext)
+            const isMatch = await new Promise((resolve) => {
+                if (user.password.startsWith('$2b$') || user.password.startsWith('$2a$')) {
+                    bcrypt.compare(password, user.password, (err, match) => {
+                        resolve(!err && match);
+                    });
+                } else {
+                    resolve(password === user.password);
                 }
-                if (!match) {
-                    return res.status(401).json({ error: 'Invalid credentials' });
-                }
-                req.session.user = { id: user.id, email: user.email, username: user.username };
-                res.status(200).json({ success: true });
             });
+
+            if (!isMatch) {
+                return res.status(401).json({ success: false, error: 'Invalid credentials' });
+            }
+
+            // Lưu thông tin user vào session
+            req.session.user = {
+                id: user.id,
+                email: user.email,
+                username: user.username,
+                role: user.role || 'user'
+            };
+
+            console.log(`✅ Login success: ${user.username} (${req.session.user.role})`);
+
+            // ✅ Gửi về frontend role + đường dẫn tương ứng
+            let redirectUrl = '/';
+            if (req.session.user.role === 'admin') {
+                redirectUrl = '/html/admin_users.html';
+            } else {
+                redirectUrl = '/html/home.html';
+            }
+
+            const loginResponse = { // Tạo đối tượng phản hồi
+                success: true,
+                message: 'Login successful',
+                role: req.session.user.role,
+                redirectUrl // 👈 gửi luôn URL về frontend
+            };
+
+            console.log("✅ Sending login response:", loginResponse);
+
+            // <<<<<<<<<<<< THÊM DÒNG NÀY VÀO ĐÂY >>>>>>>>>>
+            return res.json(loginResponse); // Gửi phản hồi JSON về client
+
         } catch (err) {
-            console.log('Error:', err);
-            res.status(500).json({ error: 'Server error' });
+            console.error('Error during login:', err.message);
+            console.error(err.stack);
+            res.status(500).json({ success: false, error: 'Server error: ' + err.message });
         }
     },
+
     logout: (req, res) => {
         req.session.destroy((err) => {
             if (err) return res.status(500).json({ error: 'Logout failed' });

@@ -6,7 +6,8 @@ const bodyParser = require('body-parser'); // Thêm body-parser
 const htmlRoutes = require('./routers/htmlRoutes');
 const apiRoutes = require('./routers/apiRoutes');
 
-app.use(express.static('views/public'));
+const path = require('path');
+app.use(express.static(path.join(__dirname, 'views', 'public')));
 app.use(bodyParser.json()); // Parse JSON body
 app.use(bodyParser.urlencoded({ extended: true })); // Parse URL-encoded body
 // Cấu hình session

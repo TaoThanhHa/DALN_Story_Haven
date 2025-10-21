@@ -5,8 +5,8 @@ document.addEventListener('DOMContentLoaded', function() {
     loginForm.addEventListener('submit', async (event) => {
         event.preventDefault(); // Ngăn chặn submit mặc định
 
-        const email = document.getElementById('user').value; // Đổi user thành email để khớp API
-        const password = document.getElementById('pass').value; // Đổi pass thành password
+        const email = document.getElementById('user').value;
+        const password = document.getElementById('pass').value;
 
         const data = {
             email: email,
@@ -19,19 +19,20 @@ document.addEventListener('DOMContentLoaded', function() {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(data) // Gửi dữ liệu dưới dạng JSON
+                body: JSON.stringify(data)
             });
 
             const result = await response.json();
+            console.log("Response JSON:", result);
 
             if (response.ok && result.success) {
+                console.log("Login result:", result); // Debug xem có redirectUrl không
                 alert('Đăng nhập thành công!');
-                window.location.href = '/'; // Chuyển hướng đến trang chính
-              
+                window.location.href = result.redirectUrl; // dùng đúng tên biến trả về
             } else {
-                // Đăng nhập thất bại
                 errorMessage.textContent = result.error || 'Đăng nhập thất bại!';
             }
+
         } catch (error) {
             console.error('Lỗi:', error);
             errorMessage.textContent = 'Có lỗi xảy ra trong quá trình đăng nhập.';
