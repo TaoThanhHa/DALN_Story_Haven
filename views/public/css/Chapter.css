@@ -18,6 +18,36 @@
   margin-bottom: 1rem;
 }
 
+/*Header edit*/
+.header .btn {
+  white-space: nowrap; /* Không cho xuống dòng */
+  font-size: 14px;
+  padding: 6px 14px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: auto;
+  line-height: 1; /* Căn chữ đều chiều cao */
+}
+
+.header .btn-success,
+.header .btn-danger,
+.header .btn-primary {
+  background-color: #c3f6e5;
+  color: #001a33;
+  border: none;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.header .btn-success:hover,
+.header .btn-danger:hover,
+.header .btn-primary:hover {
+  opacity: 0.8;
+  transform: scale(1.03);
+}
+
 /* Menu chương */
 .menu {
   position: fixed;

@@ -3,15 +3,22 @@ const Chapter = require('../models/chapterModel');
 const User = require('../models/userModel');
 const bcrypt = require('bcrypt');
 const db = require('../configs/mysqlConnect');
+const Follow = require("../models/followModel");
+console.log(">>> Follow model loaded:", Follow);
+
 
 const apiController = {
     // Story APIs
     getStories: (req, res) => {
-        Story.getAll((err, stories) => {
-            if (err) return res.status(500).json({ error: 'Database error' });
+        Story.getPublicStories((err, stories) => {
+            if (err) {
+                console.error("Database error:", err);
+                return res.status(500).json({ error: 'Database error' });
+            }
             res.status(200).json(stories);
         });
     },
+
     updateThumnail : (req, res) => {
         const storyId = req.params.id;  
         const thumbnail = req.file ? `/images/${req.file.filename}` : null;
@@ -47,6 +54,27 @@ const apiController = {
             res.status(200).json({ success: true });
         });
     },
+    updateStoryControl: (req, res) => { 
+        const { id } = req.params;
+        const { control } = req.body;
+
+        if (control === undefined) {
+            return res.status(400).json({ success: false, error: "Thiếu control" });
+        }
+
+        const sql = `UPDATE stories SET control = ? WHERE id = ?`;
+        db.query(sql, [Number(control), Number(id)], (err, result) => {  // 👈 ép kiểu ở đây
+            if (err) {
+                console.error("Lỗi khi cập nhật control:", err);
+                return res.status(500).json({ success: false, error: "Lỗi máy chủ" });
+            }
+
+            console.log("✅ Cập nhật control thành công:", result);
+            res.status(200).json({ success: true });
+        });
+    },
+
+
     getAllStoryByUserId: (req, res) => {
         if (!req.session.user) return res.status(401).json({ error: 'Unauthorized' });
         const userId = req.session.user.id;
@@ -58,17 +86,35 @@ const apiController = {
 
     createStory: (req, res) => {
         if (!req.session.user) return res.status(401).json({ error: 'Unauthorized' });
-        const { title, description, category, status } = req.body;
+
+        // Lấy dữ liệu từ form
+        const { title, description, category, status, control } = req.body;
         const thumbnail = req.file ? `/images/${req.file.filename}` : null;
         const userId = req.session.user.id;
-        console.log('Create story:', { title, description, category, status, thumbnail, userId });
 
-        const storyData = { user_id: userId, title, description, thumbnail, category, status: status || 'writing' };
+        // Log để kiểm tra dữ liệu gửi lên
+        console.log('Create story:', { title, description, category, status, control, thumbnail, userId });
+
+        // Nếu frontend không gửi, mặc định control = '0' (bản thảo)
+        const storyData = { 
+            user_id: userId,
+            title,
+            description,
+            thumbnail,
+            category,
+            status: status || 'writing',
+            control: control || '0'
+        };
+
         Story.create(storyData, (err, insertId) => {
-            if (err) return res.status(500).json({ error: `Database error : ${err}` });
+            if (err) {
+                console.error("Database error:", err);
+                return res.status(500).json({ error: `Database error: ${err.message}` });
+            }
             res.status(200).json({ success: true, storyId: insertId });
         });
     },
+
     updateChapter: async (req, res) => {
         try {
             const chapterId = req.params.id;
@@ -141,6 +187,38 @@ const apiController = {
         Chapter.getChapterNumber(storyId, (err, result) => {
             if (err) return res.status(500).json({ error: 'Database error' });
             res.status(200).json(result[0]);
+        });
+    },
+
+        // Tìm kiếm truyện theo tiêu đề
+    searchStories: (req, res) => {
+        const { title } = req.query;
+        if (!title) return res.status(400).json({ error: "Thiếu từ khóa tìm kiếm" });
+
+        Story.searchByTitle(title, (err, stories) => {
+            if (err) {
+                console.error("Database error:", err);
+                return res.status(500).json({ error: "Database error" });
+            }
+            res.status(200).json(stories);
+        });
+    },
+
+    // Lọc truyện theo thể loại
+    getStoriesByCategory: (req, res) => {
+        const { category } = req.query;
+        console.log("Category:", category);
+
+        if (!category) {
+            return res.status(400).json({ success: false, error: "Thiếu category" });
+        }
+
+        Story.getByCategory(category, (err, results) => {
+            if (err) {
+                console.error("Lỗi khi lấy truyện theo thể loại:", err);
+                return res.status(500).json({ success: false, error: "Lỗi máy chủ" });
+            }
+            res.json(results);
         });
     },
 
@@ -261,26 +339,6 @@ getStoryByTitle: (req, res) => {
         res.status(200).json(results);
     });
 },
-
-getStoriesByCategory: (req, res) => {
-  const { category } = req.query;
-  if (!category) return res.status(400).json({ message: "Thiếu tham số 'category'" });
-
-  const sql = `
-    SELECT id, title, thumbnail, category, created_at
-    FROM stories
-    WHERE LOWER(category) LIKE LOWER(?)
-    ORDER BY created_at DESC
-  `;
-  const keyword = `%${category}%`;
-  db.query(sql, [keyword], (err, results) => {
-    if (err) {
-      console.error("Lỗi khi lấy truyện theo thể loại:", err);
-      return res.status(500).json({ error: "Lỗi máy chủ" });
-    }
-    res.status(200).json(results || []);
-  });
-},
 // -------------------- VIEW --------------------
 addChapterView: (req, res) => {
   const { chapterId } = req.body;
@@ -347,45 +405,47 @@ getChapterVotes: (req, res) => {
   });
 },
 
-// -------------------- FOLLOW --------------------
 toggleFollow: (req, res) => {
-  if (!req.session.user) return res.status(401).json({ error: "Bạn cần đăng nhập" });
-  const { storyId } = req.body;
-  const userId = req.session.user.id;
+    const { storyId } = req.body;
+    const userId = req.session.user?.id; // Lấy userId từ session đăng nhập
 
-  const checkSql = `SELECT * FROM follows WHERE story_id = ? AND user_id = ?`;
-  db.query(checkSql, [storyId, userId], (err, results) => {
-    if (err) return res.status(500).json({ error: "Lỗi server" });
-    if (results.length > 0) {
-      const delSql = `DELETE FROM follows WHERE story_id = ? AND user_id = ?`;
-      db.query(delSql, [storyId, userId], (err2) => {
-        if (err2) return res.status(500).json({ error: "Lỗi khi hủy theo dõi" });
-        res.status(200).json({ followed: false });
-      });
-    } else {
-      const insertSql = `INSERT INTO follows (story_id, user_id) VALUES (?, ?)`;
-      db.query(insertSql, [storyId, userId], (err3) => {
-        if (err3) return res.status(500).json({ error: "Lỗi khi theo dõi" });
-        res.status(200).json({ followed: true });
-      });
+    if (!userId) {
+      return res.status(401).json({ error: "Bạn cần đăng nhập trước" });
     }
+
+    Follow.toggleFollow(userId, storyId, (err, result) => {
+      if (err) {
+        console.error("Lỗi theo dõi:", err);
+        return res.status(500).json({ error: "Lỗi máy chủ" });
+      }
+      res.json(result);
+    });
+  },
+
+  getLibraryStories: (req, res) => {
+    const userId = req.session.user?.id;
+    if (!userId) return res.status(401).json({ error: "Bạn cần đăng nhập" });
+
+    Follow.getUserFollows(userId, (err, stories) => {
+      if (err) {
+        console.error("Lỗi khi lấy truyện theo dõi:", err);
+        return res.status(500).json({ error: "Lỗi máy chủ" });
+      }
+      res.json(stories);
+    });
+  },
+  getFollowStatus: (req, res) => {
+  const userId = req.session.user?.id;
+  const { storyId } = req.params;
+  if (!userId) return res.json({ followed: false });
+
+  const sql = "SELECT * FROM follow WHERE user_id = ? AND story_id = ?";
+  db.query(sql, [userId, storyId], (err, results) => {
+    if (err) return res.status(500).json({ error: "Lỗi máy chủ" });
+    res.json({ followed: results.length > 0 });
   });
 },
 
-getUserFollows: (req, res) => {
-  if (!req.session.user) return res.status(401).json({ error: "Bạn cần đăng nhập" });
-  const userId = req.session.user.id;
-  const sql = `
-    SELECT s.id, s.title, s.thumbnail, s.category
-    FROM follows f
-    JOIN stories s ON f.story_id = s.id
-    WHERE f.user_id = ?
-  `;
-  db.query(sql, [userId], (err, result) => {
-    if (err) return res.status(500).json({ error: "Lỗi server" });
-    res.status(200).json(result);
-  });
-},
 
     
     getUsers: (req, res) => { /* ... */ },

@@ -49,7 +49,7 @@ function renderStories(stories) {
 
     stories.forEach((story) => {
         storyContainer.innerHTML += `
-            <div class="row g-0 mb-3 p-2 border rounded">
+            <div class="row g-0 mb-3 p-2 border-bottom rounded">
                 <div class="col-md-3 d-flex justify-content-center">
                     <img src="./${story.thumbnail || '../images/default.jpg'}" class="img-fluid rounded" alt="Story Cover">
                 </div>
@@ -65,7 +65,7 @@ function renderStories(stories) {
                     </div>
                 </div>
                 <div class="col-md-2 d-flex flex-column justify-content-around align-items-center">
-                    <a href="/story/edit?id=${story.id}" class="btn btn-primary btn-sm mb-2 w-100">
+                    <a href="/story/edit?id=${story.id}" class="btn btn-primary btn-sm mb-1 w-100">
                         <i class="fas fa-edit"></i> Sửa
                     </a>
                     <button class="btn btn-danger btn-sm w-100" onclick="deleteStory(${story.id})">
@@ -101,3 +101,4 @@ async function deleteStory(storyId) {
         alert(error.message || "Có lỗi xảy ra khi xóa truyện");
     }
 }
+

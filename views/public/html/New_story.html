@@ -4,22 +4,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chỉnh sửa truyện</title>
+  <title>Tạo truyện mới</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
     crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="stylesheet" href="../css/Create_stories.css" type="text/css">
-  <style>
-    /* ép kích thước ảnh bìa */
-    #preview-image {
-      width: 200px;
-      height: 260px;
-      object-fit: cover;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-    }
-  </style>
+  <link rel="stylesheet" href="../css/Story.css" type="text/css">
 </head>
 
 <body>
@@ -37,22 +27,17 @@
         <div class="avata text-center">
           <input type="file" id="image-upload" accept="image/*" style="display: none;">
           <label for="image-upload">
-            <img class="img" id="preview-image" src="#" alt="Chọn ảnh bìa">
+            <img class="img" id="preview-image" src="#" alt="Ấn vào đây">
           </label>
         </div>
       </div>
 
       <!-- Nội dung -->
       <div class="box-box">
-        <!-- Tabs -->
-        <div class="words mb-3">
-          <span class="word selected" onclick="changeContent(this, 'Tạo tác phẩm')">Chỉnh sửa tác phẩm</span>
-          <span class="word" onclick="changeContent(this, 'Tạo chap')">Quản lý chap</span>
-        </div>
 
         <!-- Box -->
         <div class="box" id="box">
-          <!-- Chỉnh sửa tác phẩm -->
+          <!-- Tạo tác phẩm -->
           <div class="story">
             <p for="story-title">Tiêu đề:</p>
             <input type="text" id="story-title" class="form-control"
@@ -102,16 +87,6 @@
               </select>
             </div>
           </div>
-
-          <!-- Quản lý chap -->
-          <div class="chap" style="display: none;">
-            <div class="button-chap">
-              <a onclick="addChapter()" role="button">+ Chương mới</a>
-            </div>
-            <div id="chapter-list">
-              <p>Chưa có chương nào.</p>
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -119,6 +94,6 @@
 
   <!-- Script -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="../javascript/editstory.js"></script>
+  <script src="../javascript/New_story.js"></script>
 </body>
 </html>

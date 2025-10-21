@@ -25,6 +25,7 @@ router.get('/story/:id', apiController.getStory);
 router.put('/story/:id', apiController.updateStory);
 router.delete('/story/:id', apiController.deleteStory);
 router.post('/story/new', authMiddleware, upload.single('thumbnail'), apiController.createStory);
+router.put('/story/:id/control', apiController.updateStoryControl);
 router.put('/story/:id/thumbnail', upload.single('thumbnail'), apiController.updateThumnail);
 router.post('/chapter/new', authMiddleware, apiController.createChapter);
 router.get('/chapter/:id', apiController.getChapter);
@@ -32,8 +33,6 @@ router.get('/chapters/max', apiController.getMaxPageChapter);
 router.get('/user/account-info', authMiddleware, apiController.getAccountInfo);
 router.put('/chapter/:id', authMiddleware, apiController.updateChapter);
 router.delete('/chapter/:id', authMiddleware, apiController.deleteChapter);
-router.get('/stories/search', apiController.getStoryByTitle);
-router.get('/stories/category', apiController.getStoriesByCategory);
 // View
 router.post('/chapter/view', apiController.addChapterView);
 router.get('/story/:storyId/views', apiController.getStoryViews);
@@ -43,8 +42,13 @@ router.post('/chapter/vote', apiController.toggleVote);
 router.get('/chapter/:chapterId/votes', apiController.getChapterVotes);
 
 // Follow
-router.post('/story/follow', apiController.toggleFollow);
-router.get('/user/follows', apiController.getUserFollows);
+router.get("/library", apiController.getLibraryStories);
+router.get("/story/follow-status/:storyId", storyController.checkFollowStatus);
+router.post("/story/follow", storyController.toggleFollow);
+
+//Search
+router.get('/stories/search', apiController.searchStories);
+router.get('/stories/category', apiController.getStoriesByCategory);
 
 // User routes
 router.post('/register', apiController.register);

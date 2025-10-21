@@ -1,10 +1,12 @@
 const db = require('../configs/mysqlConnect');
 
 const Story = {
-    getAll: (callback) => {
+    getPublicStories: (callback) => {
         const sql = `
             SELECT s.*
-            FROM stories s 
+            FROM stories s
+            WHERE s.control = '1'
+            ORDER BY s.id DESC
         `;
         db.query(sql, callback);
     },
@@ -36,10 +38,33 @@ const Story = {
         `;
         db.query(sql, [`%${title}%`], callback);
     },
+        // Tìm kiếm truyện theo tiêu đề, chỉ lấy truyện công khai
+    searchByTitle: (title, callback) => {
+        const sql = `
+            SELECT *
+            FROM stories
+            WHERE control = '1' AND title LIKE ?
+            ORDER BY id DESC
+        `;
+        db.query(sql, [`%${title}%`], callback);
+    },
+
+    // Lấy truyện theo thể loại, chỉ lấy truyện công khai
+    getByCategory: (category, callback) => {
+        const sql = `
+            SELECT id, title, thumbnail, category
+            FROM stories
+            WHERE category LIKE ? AND control = 1
+            ORDER BY created_at DESC
+        `;
+        db.query(sql, [`%${category}%`], callback);
+    },
+
+
     create: (storyData, callback) => {
         const sql = `
-            INSERT INTO stories (user_id, title, description, thumbnail, category, status) 
-            VALUES (?, ?, ?, ?, ?, ?)
+            INSERT INTO stories (user_id, title, description, thumbnail, category, status, control) 
+            VALUES (?, ?, ?, ?, ?, ?, ?)
         `;
         db.query(sql, [
             storyData.user_id, 
@@ -47,7 +72,8 @@ const Story = {
             storyData.description, 
             storyData.thumbnail, 
             storyData.category, 
-            storyData.status
+            storyData.status,
+            storyData.control
         ], (err, result) => {
             if (err) {
                 callback(err); // Nếu có lỗi, chỉ truyền lỗi

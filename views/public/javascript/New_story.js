@@ -47,6 +47,7 @@ function validateImage(fileInput) {
 }
 
 // Lưu truyện
+// Lưu truyện
 async function saveStory() {
   try {
     const title = document.getElementById('story-title').value;
@@ -69,9 +70,10 @@ async function saveStory() {
     const formData = new FormData();
     formData.append('title', title);
     formData.append('description', description);
-    formData.append('categories', JSON.stringify(categories));
+    formData.append('category', categories.join(', '));
     formData.append('status', status);
     formData.append('thumbnail', imageInput.files[0]);
+    formData.append('control', '0'); // 🔹 mặc định là bản thảo
 
     const response = await fetch('http://localhost:3000/api/story/new', {
       method: 'POST',
@@ -83,33 +85,16 @@ async function saveStory() {
     if (!response.ok) throw new Error(result.error || 'Có lỗi xảy ra khi lưu truyện');
 
     STORYID = result.storyId;
-    alert('Truyện đã được lưu thành công!');
+    alert('Truyện đã được lưu dưới dạng bản thảo!');
+
+    // 🔹 Chuyển hướng sang trang chỉnh sửa
+    window.location.href = `/html/Edit_story.html?id=${STORYID}`;
   } catch (error) {
     console.error('Error saving story:', error);
     alert(error.message || 'Có lỗi xảy ra khi lưu truyện');
   }
 }
 
-// Chuyển tab
-function changeContent(element, text) {
-  const storyElement = document.querySelector('.story');
-  const chapElement = document.querySelector('.chap');
-
-  storyElement.style.display = text === 'Tạo tác phẩm' ? 'block' : 'none';
-  chapElement.style.display = text === 'Tạo chap' ? 'block' : 'none';
-
-  document.querySelectorAll('.word').forEach(word => word.classList.remove('selected'));
-  element.classList.add('selected');
-}
-
-// Thêm chương
-function addChapter() {
-  if (!STORYID) {
-    alert('Vui lòng lưu truyện trước khi thêm chương');
-    return;
-  }
-  window.location.href = `/create-chapter?storyId=${STORYID}`;
-}
 
 // Default
 document.querySelector('.story').style.display = 'block';

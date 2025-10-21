@@ -1,35 +1,3 @@
-/* Reset nhẹ */
-body {
-  font-family: 'Ponomar', sans-serif;
-  background-color: #f8f9fa;
-  color: #212529;
-  margin: 0;
-  padding: 0;
-}
-
-/* Navbar */
-.navbar-brand img {
-  max-height: 40px;
-}
-
-.navbar-nav .nav-link {
-  font-weight: 500;
-  margin-right: 10px;
-}
-
-.navbar-nav .dropdown-menu {
-  font-size: 0.95rem;
-}
-
-/* Search form trong navbar */
-.search-form input {
-  border-radius: 20px 0 0 20px;
-}
-
-.search-form button {
-  border-radius: 0 20px 20px 0;
-}
-
 /* Box chứa danh sách */
 .box {
   padding: 40px 15px;
@@ -57,7 +25,7 @@ body {
 }
 
 #storyContainer .card-img-top {
-  height: 420px;
+  height: 300px;
   object-fit: cover;
 }
 

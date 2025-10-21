@@ -1,7 +1,3 @@
-// ------------------------------
-// search.js — dùng cho mọi trang
-// ------------------------------
-
 function performSearch(query) {
   if (!query) return;
 
@@ -12,13 +8,13 @@ function performSearch(query) {
       return response.json();
     })
     .then((data) => {
-      renderStories(data);
+      renderSearchResults(data);
     })
     .catch((error) => console.error("Search error:", error));
 }
 
 // Hiển thị danh sách truyện
-function renderStories(stories) {
+function renderSearchResults(stories) {
   const container = document.getElementById("searchResults");
   if (!container) return; // Nếu không ở trang kết quả thì thoát
 

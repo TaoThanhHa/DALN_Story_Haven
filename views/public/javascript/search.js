@@ -1,5 +1,5 @@
 function performSearch(query) {
-    fetch("/api/stories") // Gọi API lại để lọc dữ liệu
+    fetch("/api/stories")
         .then((response) => response.json())
         .then((data) => {
             if (data) {
@@ -13,7 +13,6 @@ function performSearch(query) {
         .catch((error) => console.error("Search error:", error));
 }
 
-// Xử lý tìm kiếm
 document.querySelector(".search-form").addEventListener("submit", function (event) {
     event.preventDefault();
     const searchQuery = document.querySelector(".search-form input").value;

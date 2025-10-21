@@ -1,19 +1,18 @@
 const STORYID = new URLSearchParams(window.location.search).get("id");
 let selectedFile = null;
+let currentControl = 0; // Lưu trạng thái control hiện tại (0: bản thảo, 1: đã đăng)
 
+// Khi tải trang xong
 document.addEventListener("DOMContentLoaded", () => {
   if (STORYID) {
     fetchStoryData(STORYID);
   }
 
-  // Mặc định hiện box "Chỉnh sửa tác phẩm"
   document.querySelector(".story").style.display = "block";
   document.querySelector(".chap").style.display = "none";
 });
 
-/**
- * Đổi tab (Chỉnh sửa tác phẩm ↔ Quản lý chap)
- */
+// Chuyển tab giữa Tác phẩm / Chapter
 function changeContent(element, tab) {
   const storyElement = document.querySelector(".story");
   const chapElement = document.querySelector(".chap");
@@ -31,14 +30,11 @@ function changeContent(element, tab) {
     }
   }
 
-  // Đổi màu tab
   document.querySelectorAll(".word").forEach(w => w.classList.remove("selected"));
   element.classList.add("selected");
 }
 
-/**
- * Lấy dữ liệu truyện từ API
- */
+// Lấy dữ liệu truyện
 function fetchStoryData(storyId) {
   fetch(`/api/story/${storyId}`)
     .then(res => res.json())
@@ -52,14 +48,17 @@ function fetchStoryData(storyId) {
     .catch(err => console.error("Lỗi khi lấy dữ liệu:", err));
 }
 
-/**
- * Điền dữ liệu vào form chỉnh sửa
- */
+// Điền dữ liệu vào form chỉnh sửa
 function fillStoryData(story) {
   document.getElementById("story-title").value = story.title || "";
   document.getElementById("story-content").value = story.description || "";
+  document.getElementById("status-select").value = story.status || "writing";
 
-  // Tick checkbox thể loại
+  // Lưu trạng thái control
+  currentControl = story.control ? parseInt(story.control) : 0;
+  updateControlButton();
+
+  // Checkbox thể loại
   if (story.category) {
     const categories = story.category.split(",").map(c => c.trim());
     document.querySelectorAll("#category-list input[type='checkbox']").forEach(cb => {
@@ -67,22 +66,47 @@ function fillStoryData(story) {
     });
   }
 
-  // Tiến độ
-  document.getElementById("status-select").value = story.status || "writing";
-
-  // Ảnh bìa
   if (story.thumbnail) {
     document.getElementById("preview-image").src = story.thumbnail;
   }
 }
 
-/**
- * Lưu thông tin truyện + upload ảnh (nếu có)
- */
+// 🟡 Cập nhật nút hiển thị theo trạng thái control
+function updateControlButton() {
+  const btn = document.getElementById("toggle-control-btn");
+  if (!btn) return;
+  btn.textContent = currentControl === 1 ? "Dừng đăng tải" : "Đăng tải";
+}
+
+// 🟢 Đổi trạng thái đăng tải
+function togglePublish() {
+  if (!STORYID) return alert("Không tìm thấy ID truyện!");
+
+  const newControl = currentControl === 1 ? 0 : 1;
+
+  fetch(`/api/story/${STORYID}/control`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ control: newControl })
+  })
+    .then(res => res.json())
+    .then(data => {
+      if (!data.success) {
+        alert("Lỗi khi cập nhật trạng thái đăng tải!");
+        return;
+      }
+
+      currentControl = newControl;
+      updateControlButton();
+      alert(`Truyện đã được ${newControl === 1 ? "đăng tải" : "dừng đăng tải"}.`);
+    })
+    .catch(err => console.error("Lỗi khi đổi trạng thái:", err));
+}
+
+// 🟢 Lưu thông tin truyện
 function saveStory() {
   if (!STORYID) return alert("Không tìm thấy ID truyện!");
 
-  // Gom checkbox được chọn
   const categories = Array.from(
     document.querySelectorAll("#category-list input[type='checkbox']:checked")
   ).map(cb => cb.value);
@@ -91,10 +115,10 @@ function saveStory() {
     title: document.getElementById("story-title").value.trim(),
     description: document.getElementById("story-content").value.trim(),
     category: categories.join(", "),
-    status: document.getElementById("status-select").value
+    status: document.getElementById("status-select").value,
+    control: currentControl
   };
 
-  // 1. Gửi dữ liệu text trước
   fetch(`/api/story/${STORYID}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
@@ -107,7 +131,6 @@ function saveStory() {
         return;
       }
 
-      // 2. Nếu có chọn ảnh thì upload tiếp
       if (selectedFile) {
         const formData = new FormData();
         formData.append("thumbnail", selectedFile);
@@ -131,9 +154,7 @@ function saveStory() {
     .catch(err => console.error("Lỗi khi lưu:", err));
 }
 
-/**
- * Lấy danh sách chapter
- */
+// 🟢 Load danh sách chương
 function loadChapterList(storyId) {
   fetch(`/api/story/${storyId}`)
     .then(res => res.json())
@@ -147,9 +168,7 @@ function loadChapterList(storyId) {
     .catch(err => console.error("Lỗi khi load chương:", err));
 }
 
-/**
- * Hiển thị danh sách chapter
- */
+// Hiển thị danh sách chương
 function fillChapterList(chapters) {
   const chapterListDiv = document.getElementById("chapter-list");
 
@@ -187,9 +206,7 @@ function fillChapterList(chapters) {
   chapterListDiv.innerHTML = html;
 }
 
-/**
- * Thêm chương mới
- */
+// Thêm chương mới
 function addChapter() {
   if (!STORYID) {
     alert("Vui lòng lưu truyện trước khi thêm chương!");
@@ -198,9 +215,7 @@ function addChapter() {
   window.location.href = `/create-chapter?storyId=${STORYID}`;
 }
 
-/**
- * Xóa chương
- */
+// Xóa chương
 function deleteChapter(chapterId) {
   if (!confirm("Bạn có chắc muốn xóa chương này?")) return;
 
@@ -217,9 +232,7 @@ function deleteChapter(chapterId) {
     .catch(err => console.error("Lỗi khi xóa:", err));
 }
 
-/**
- * Upload ảnh bìa (preview — upload khi bấm Lưu)
- */
+// Upload ảnh (chỉ preview, upload khi bấm lưu)
 document.getElementById("image-upload").addEventListener("change", e => {
   selectedFile = e.target.files[0];
   if (selectedFile) {
@@ -230,4 +243,3 @@ document.getElementById("image-upload").addEventListener("change", e => {
     reader.readAsDataURL(selectedFile);
   }
 });
-
