@@ -54,5 +54,6 @@ router.get('/stories/category', apiController.getStoriesByCategory);
 router.post('/register', apiController.register);
 router.post('/login', apiController.login);
 router.post('/logout', authMiddleware, apiController.logout);
+router.put('/user/update-profile', authMiddleware, apiController.updateUserProfile); 
 
 module.exports = router;

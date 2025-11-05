@@ -23,10 +23,15 @@
                     <form id="registerForm">
                         <input type="text" id="name" name="name" placeholder="Tên" required>
                         <input type="email" id="email" name="email" placeholder="Email" required>
-                        <div class="error" id="email-error" style="display: none; color: red;">Email không hợp lệ.</div>
+                        <div class="error" id="email-error" style="display: none; color: red;">Email không hợp lệ. Vui lòng sử dụng email @gmail.com.</div>
                         <input type="tel" id="phone" name="phone" placeholder="Số điện thoại" required>
+                        
                         <input type="password" id="password" name="password" placeholder="Mật khẩu" required>
+                        <div class="error" id="password-error" style="display: none; color: red;"></div> <!-- Thêm phần tử lỗi mật khẩu -->
+
                         <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Nhập lại mật khẩu" required>
+                        <div class="error" id="confirm-password-error" style="display: none; color: red;"></div> <!-- Thêm phần tử lỗi xác nhận mật khẩu -->
+
                         <button type="submit" class="buttondn">Đăng ký</button>
                     </form>
                 </div>
@@ -41,7 +46,5 @@
     </div>
     
     <script src="../javascript/ĐK.js"></script>
-        
-
 </body>
 </html>

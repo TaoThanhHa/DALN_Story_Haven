@@ -2,7 +2,7 @@ const Story = require('../models/storyModel');
 const Chapter = require('../models/chapterModel');
 const User = require('../models/userModel');
 const bcrypt = require('bcrypt');
-const db = require('../configs/mysqlConnect');
+const db = require('../configs/mysqlConnect'); // Đã đổi connection thành db
 const Follow = require("../models/followModel");
 console.log(">>> Follow model loaded:", Follow);
 
@@ -372,7 +372,7 @@ getStoryByTitle: (req, res) => {
         ORDER BY created_at DESC
     `;
 
-    db.query(sql, [`%${title}%`], (err, results) => {
+    db.query(sql, [`%${title}%}%`], (err, results) => {
         if (err) {
             console.error("Lỗi khi tìm kiếm truyện:", err);
             return res.status(500).json({ error: "Lỗi máy chủ" });
@@ -494,7 +494,40 @@ toggleFollow: (req, res) => {
     getUsers: (req, res) => { /* ... */ },
     getUser: (req, res) => { /* ... */ },
     updateUser: (req, res) => { /* ... */ },
-    deleteUser: (req, res) => { /* ... */ }
+    deleteUser: (req, res) => { /* ... */ },
+
+    // Hàm để cập nhật thông tin người dùng
+    updateUserProfile: (req, res) => { // DI CHUYỂN HÀM VÀO TRONG ĐỐI TƯỢNG apiController
+        const userId = req.session.user.id; // Lấy ID người dùng từ session
+        const { username, email, phone, avatar, description } = req.body; // Lấy dữ liệu từ body request
+
+        if (!userId) {
+            return res.status(401).json({ error: 'Người dùng chưa đăng nhập.' });
+        }
+
+        // Xây dựng câu lệnh SQL để cập nhật
+        const sql = `
+            UPDATE users 
+            SET username = ?, email = ?, phonenumber = ?, avatar = ?, description = ?
+            WHERE id = ?`;
+        
+        // Thực thi câu lệnh SQL
+        db.query(sql, [username, email, phone, avatar, description, userId], (err, result) => { // Dùng db thay vì connection
+            if (err) {
+                console.error('Lỗi khi cập nhật profile:', err);
+                return res.status(500).json({ error: 'Có lỗi xảy ra khi cập nhật thông tin người dùng.', details: err.message });
+            }
+            
+            if (result.affectedRows === 0) {
+                return res.status(404).json({ error: 'Không tìm thấy người dùng để cập nhật.' });
+            }
+
+            // Cập nhật lại username trong session nếu có thay đổi
+            req.session.user.username = username;
+            
+            res.json({ success: true, message: 'Cập nhật thông tin thành công!' });
+        });
+    }
 };
 
 module.exports = apiController;
