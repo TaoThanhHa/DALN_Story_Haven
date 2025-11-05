@@ -1,5 +1,4 @@
 # DALN_Story_Haven
-# StoryHaven
 
 ## Tên dự án: Story Haven
 
