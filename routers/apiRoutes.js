@@ -43,8 +43,8 @@ router.get('/chapter/:chapterId/votes', apiController.getChapterVotes);
 
 // Follow
 router.get("/library", apiController.getLibraryStories);
-router.get("/story/follow-status/:storyId", storyController.checkFollowStatus);
-router.post("/story/follow", storyController.toggleFollow);
+router.get("/story/follow-status/:storyId", apiController.getFollowStatus);
+router.post("/story/follow", apiController.toggleFollow);
 
 //Search
 router.get('/stories/search', apiController.searchStories);

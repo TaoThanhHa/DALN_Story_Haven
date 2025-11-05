@@ -302,17 +302,19 @@ const apiController = {
                 id: user.id,
                 email: user.email,
                 username: user.username,
-                role: user.role || 'user'
+                role: user.role || 'user' // Đảm bảo role được set, mặc định là 'user'
             };
 
             console.log(`✅ Login success: ${user.username} (${req.session.user.role})`);
 
             // ✅ Gửi về frontend role + đường dẫn tương ứng
-            let redirectUrl = '/';
+            let redirectUrl = '/'; // Mặc định về trang chủ
             if (req.session.user.role === 'admin') {
-                redirectUrl = '/html/admin_users.html';
+                redirectUrl = '/admin/users'; // Nếu là admin, chuyển hướng đến trang admin
             } else {
-                redirectUrl = '/html/home.html';
+                // Nếu là người dùng thường, chuyển hướng về trang chủ '/'
+                // Hoặc bạn có thể chọn một trang khác như '/my-story' hay '/account'
+                redirectUrl = '/'; // <--- ĐÃ SỬA TỪ '/html/home.html' THÀNH '/'
             }
 
             const loginResponse = { // Tạo đối tượng phản hồi
@@ -324,7 +326,6 @@ const apiController = {
 
             console.log("✅ Sending login response:", loginResponse);
 
-            // <<<<<<<<<<<< THÊM DÒNG NÀY VÀO ĐÂY >>>>>>>>>>
             return res.json(loginResponse); // Gửi phản hồi JSON về client
 
         } catch (err) {
